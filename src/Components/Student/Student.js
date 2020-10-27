@@ -6,6 +6,7 @@ class Student extends Component {
     super();
     this.state = {
       studentList: [],
+      newStudent: null,
     };
   }
 
@@ -23,6 +24,31 @@ class Student extends Component {
       });
   };
 
+  addStudent = (name) => {
+    fetch('http://localhost:8080/student', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(name),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return Promise.resolve();
+        }
+        return Promise.reject();
+      })
+      .then(() => this.refreshStudentList());
+  };
+
+  enterPressed(event) {
+    const code = event.keyCode || event.which;
+    if (code === 13) {
+      this.setState({ newStudent: event.target.value });
+      this.addStudent(event.target.value);
+    }
+  }
+
   render() {
     return (
       <div>
@@ -31,6 +57,20 @@ class Student extends Component {
           {this.state.studentList.map((student) => (
             <DisplayStudent key={student.id} id={student.id} name={student.name} />
           ))}
+          {this.state.newStudent ? (
+            <DisplayStudent
+              key={this.state.studentList.length + 1}
+              id={this.state.studentList.length + 1}
+              name={this.state.newStudent}
+            />
+          ) : (
+            <input
+              className="add_student"
+              type="text"
+              placeholder="+添加学员"
+              onKeyPress={this.enterPressed.bind(this)}
+            />
+          )}
         </div>
       </div>
     );
