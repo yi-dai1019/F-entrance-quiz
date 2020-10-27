@@ -6,7 +6,7 @@ class Student extends Component {
     super();
     this.state = {
       studentList: [],
-      newStudent: null,
+      willAddStudent: false,
     };
   }
 
@@ -41,10 +41,15 @@ class Student extends Component {
       .then(() => this.refreshStudentList());
   };
 
+  handleInput = () => {
+    this.setState({
+      willAddStudent: true,
+    });
+  };
+
   enterPressed(event) {
     const code = event.keyCode || event.which;
     if (code === 13) {
-      this.setState({ newStudent: event.target.value });
       this.addStudent(event.target.value);
     }
   }
@@ -57,13 +62,14 @@ class Student extends Component {
           {this.state.studentList.map((student) => (
             <DisplayStudent key={student.id} id={student.id} name={student.name} />
           ))}
-          {this.state.newStudent ? (
-            <DisplayStudent
-              key={this.state.studentList.length + 1}
-              id={this.state.studentList.length + 1}
-              name={this.state.newStudent}
-            />
-          ) : (
+
+          {!this.state.willAddStudent && (
+            <button id="add_student" type="button" onClick={this.handleInput}>
+              +添加学员
+            </button>
+          )}
+
+          {this.state.willAddStudent && (
             <input
               className="add_student"
               type="text"
