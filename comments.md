@@ -15,7 +15,6 @@
 
 **Details:**
 
-- \- teamList 应该提取到 App 组件中，分组操作会引起这 3 个数据的变化
 - \- refreshGroupList 为定义
 - \- 直接传入 team 对象给 DisplayTeam 即可
 
