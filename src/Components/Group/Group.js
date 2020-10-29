@@ -4,7 +4,6 @@ import DisplayTeam from './DisplayTeam';
 class Group extends Component {
   constructor() {
     super();
-    // TODO GTB-知识点: - teamList应该提取到App组件中，分组操作会引起这3个数据的变化
     this.state = {
       teamList: [],
     };
