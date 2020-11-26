@@ -17,6 +17,7 @@ class Group extends Component {
 
   render() {
     return (
+      // TODO GTB-知识点: * 没有使用语义标签
       <div>
         <h1>分组学员</h1>
         <button type="button" onClick={this.fetchGroup(this.state.groupNumber)}>
