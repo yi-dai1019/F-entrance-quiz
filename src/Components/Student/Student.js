@@ -1,44 +1,17 @@
 import React, { Component } from 'react';
 import DisplayStudent from './DisplayStudent';
+import { fetchAddStudent } from '../../fetchData';
 
 class Student extends Component {
   constructor() {
     super();
     this.state = {
-      studentList: [],
       willAddStudent: false,
     };
   }
 
-  componentDidMount() {
-    this.refreshStudentList();
-  }
-
-  refreshStudentList = () => {
-    fetch('http://localhost:8080/students')
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          studentList: data,
-        });
-      });
-  };
-
   addStudent = (name) => {
-    fetch('http://localhost:8080/student', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(name),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return Promise.resolve();
-        }
-        return Promise.reject();
-      })
-      .then(() => this.refreshStudentList());
+    fetchAddStudent(name);
   };
 
   handleInput = () => {
@@ -55,23 +28,24 @@ class Student extends Component {
   }
 
   render() {
+    const { studentList } = this.props;
     return (
       <div>
         <h1>学员列表</h1>
-        <div className="student_list">
-          {this.state.studentList.map((student) => (
+        <div className="student-list">
+          {studentList.map((student) => (
             <DisplayStudent key={student.id} id={student.id} name={student.name} />
           ))}
 
           {!this.state.willAddStudent && (
-            <button id="add_student" type="button" onClick={this.handleInput}>
+            <button id="add-student" type="button" onClick={this.handleInput}>
               +添加学员
             </button>
           )}
 
           {this.state.willAddStudent && (
             <input
-              className="add_student"
+              className="add-student"
               type="text"
               placeholder="+添加学员"
               onKeyPress={this.enterPressed.bind(this)}

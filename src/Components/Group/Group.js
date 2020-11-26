@@ -1,37 +1,29 @@
 import React, { Component } from 'react';
 import DisplayTeam from './DisplayTeam';
+import { fetchGetInfo } from '../../fetchData';
 
 class Group extends Component {
   constructor() {
     super();
     this.state = {
-      teamList: [],
+      groupList: [],
     };
   }
 
-  handleGroupingClick = () => {
-    this.fetchGrouping().then(() => this.refreshGroupList());
-  };
-
-  fetchGrouping = () => {
-    fetch('http://localhost:8080/grouping')
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          teamList: data,
-        });
-      });
+  fetchGroup = (groupNumber) => {
+    const groupList1 = fetchGetInfo(`groups/${groupNumber}`);
+    this.setState({ groupList: groupList1 });
   };
 
   render() {
     return (
       <div>
         <h1>分组学员</h1>
-        <button type="button" onClick={this.handleGroupingClick}>
+        <button type="button" onClick={this.fetchGroup(this.state.groupNumber)}>
           分组学员
         </button>
-        {this.state.teamList.map((team) => (
-          <DisplayTeam key={team.id} id={team.id} name={team.name} students={team.students} />
+        {this.state.groupList.map((group) => (
+          <DisplayTeam key={group.id} id={group.id} name={group.name} students={group.students} />
         ))}
       </div>
     );
